@@ -1,3 +1,7 @@
+import QRCode from 'qrcode';
+import jsQR from 'jsqr';
+import CryptoJS from 'crypto-js';
+
 // Get elements from the DOM
 const qrContainer = document.getElementById('qr-container');
 const qrContainer2 = document.getElementById('qr-container2');
