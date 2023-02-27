@@ -1,0 +1,37 @@
+body {
+	font-family: Arial, sans-serif;
+}
+h2 {
+	margin-top: 20px;
+}
+#qr-container, #qr-container2 {
+	margin-top: 20px;
+	text-align: center;
+}
+#qr-video, #qr-video2 {
+	width: 100%;
+	height: auto;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+input[type="text"] {
+	width: 100%;
+	box-sizing: border-box;
+	padding: 5px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+button {
+	padding: 10px;
+	font-size: 16px;
+	background-color: #4CAF50;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+button:hover {
+	background-color: #3e8e41;
+}
