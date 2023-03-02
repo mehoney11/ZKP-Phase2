@@ -1,32 +1,20 @@
-imo
-let qrContentInput = document.getElementById("qr-content");
-let qrGenerationForm =
-document.getElementById("generate-random-qrcode").addEventListener("click", function () {
-    // Generate random string
-    let randomString = generateRandomString();
-    
-    if (qrCode == null) {
-      // Generate code initially
-      qrCode = generateQrCode(randomString);
-    } else {
-      // If code already generated then make
-      // again using same object
-      qrCode.makeCode(randomString);
-    }
-  });
-  
-let qrCode;
- 
-function generateQrCode(qrContent) {
-  return new QRCode("qr-code", {
-    text: qrContent,
+window.addEventListener('load', function() {
+  const randomString = generateRandomString(20);
+  document.getElementById('string-random').textContent = randomString;
+
+  // Create a new QRCode instance qrcode
+  const qrcode = new QRCode(document.getElementById("qrcode"), {
     width: 256,
     height: 256,
     colorDark: "#000000",
     colorLight: "#ffffff",
-    correctLevel: QRCode.CorrectLevel.H,
+    correctLevel: QRCode.CorrectLevel.H
   });
-}
+
+  // Generate the QR code with the random string
+  qrcode.makeCode(randomString);
+});
+
 function generateRandomString() {
     let length = 20;
     let characterSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -37,26 +25,3 @@ function generateRandomString() {
     }
     return result;
   }
- 
-function qrToString() {
-  alert("Hello World!");
-}
-
-  
- /*
-// Event listener for form submit event
-qrGenerationForm.addEventListener("submit", function (event) {
-  // Prevent form submission
-  event.preventDefault();
-  let qrContent = qrContentInput.value;
-  if (qrCode == null) {
-       
-    // Generate code initially
-    qrCode = generateQrCode(qrContent);
-  } else {
-       
-    // If code already generated then make
-    // again using same object
-    qrCode.makeCode(qrContent);
-  }
-});*/
