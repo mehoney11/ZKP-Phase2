@@ -17,4 +17,6 @@
   button:hover {
     background-color: #C5C6C8;
   }
-  
+.qrcode {
+    text-align: center;
+ }
