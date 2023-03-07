@@ -9,13 +9,13 @@
     <title>Customer Page</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" integrity="sha512-ZDSPMa/JM1D+7kdg2x3BsruQ6T/JpJo3jWDWkCZsP+5yVyp1KfESqLI+7RqB5k24F7p2cV7i2YHh/890y6P6Sw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
-    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qr-scanner/1.0.0/qr-scanner.min.js" integrity="sha512-RALhYS0ewkXGF89HeBM99Z2XijKf/g4u1unreFVkbtLIcSgQy+/1k9wsk5hF10HS8MvoIsUUWqoAMRIXJJQ83A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="style.css">
     </head>
  
     <body>
-        <header class="container">
-            <h1>Customer Page </h1>
+        <header>
+            <h1 id="header">Customer Page </h1>
         </header>
         <main class="container">
             <button id="button-qr-generation">GenerateQR Code</button>
@@ -23,9 +23,13 @@
             <button id="button-qr-scanner">Scan QR Code </button> </div>
             <div id="string-random"></div>
             <div id="qrcode"></div>
+            <video id="camera"></video>
+            <div id="strReceievedDislay">  </div>
+
             <div class="container">
                 <button onclick="location.href='index.html'">Home Page</button>
               </div> 
+              <script src="script.js"></script>
         </main>
     </body>
 </html>
