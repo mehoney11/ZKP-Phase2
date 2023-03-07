@@ -1,3 +1,9 @@
+#header{
+  padding: 80px;
+    text-align: center;
+    background: #FDBB30;
+    color: rgb(0, 0, 0);
+}
 .container {
     text-align: center;
     margin-top: 50px;
@@ -17,6 +23,22 @@
   button:hover {
     background-color: #C5C6C8;
   }
-.qrcode {
-    text-align: center;
- }
+#qrcode {
+    width: 512px;
+    height: 512px;
+    margin: 0 auto;
+    color: #FDBB30;
+    border: 1px solid #ccc;
+    background-color: #fff;
+  }
+ #string-random{
+  white-space: pre-wrap;
+        white-space: -moz-pre-wrap;
+        white-space: -pre-wrap;
+        white-space: -o-pre-wrap;
+        word-wrap: break-word;
+        color: rgb(0, 0, 0);
+        padding: 1%;
+        border-color: #FDBB30;
+        border-radius: 1%;
+  }
