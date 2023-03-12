@@ -9,27 +9,71 @@
     <title>Customer Page</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" integrity="sha512-ZDSPMa/JM1D+7kdg2x3BsruQ6T/JpJo3jWDWkCZsP+5yVyp1KfESqLI+7RqB5k24F7p2cV7i2YHh/890y6P6Sw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qr-scanner/1.0.0/qr-scanner.min.js" integrity="sha512-RALhYS0ewkXGF89HeBM99Z2XijKf/g4u1unreFVkbtLIcSgQy+/1k9wsk5hF10HS8MvoIsUUWqoAMRIXJJQ83A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="script.js"></script>
     <link rel="stylesheet" href="style.css">
     </head>
  
     <body>
-        <header>
-            <h1 id="header">Customer Page </h1>
+        <header class="container">
+            <h1>Customer Page </h1>
         </header>
         <main class="container">
             <button id="button-qr-generation">GenerateQR Code</button>
             <div>
-            <button id="button-qr-scanner">Scan QR Code </button> </div>
+                <button id="qrScan" onclick="startQRScanConsumer()">Scan QR Code </button>
+                <div style="width: 500px" id="readerConsumer" hidden></div>
+          <h1>QR Decode String</h1>
+          <div id="decodeConsumer"></div>
+          <h1>Hash Code</h1>
+          <div id="swapHashCodeConsumer"></div>
             <div id="string-random"></div>
+            <div id="qr-container">
             <div id="qrcode"></div>
-            <video id="camera"></video>
-            <div id="strReceievedDislay">  </div>
-
+                <div id="description"></div>
+        </div>
             <div class="container">
                 <button onclick="location.href='index.html'">Home Page</button>
               </div> 
-              <script src="script.js"></script>
         </main>
     </body>
+
+<script src="html5-qrcode.min.js"></script>
+<script src="fixed.js"></script>
+<script>
+
+var html5QrcodeScanner = new Html5QrcodeScanner(
+    "readerConsumer", { fps: 10, qrbox: 250 });
+
+    function onScanSuccess(decodedText, decodedResult) {
+      // Handle on success condition with the decoded text or result.
+      console.log(`Scan result: ${decodedText}`, decodedResult);
+      document.getElementById("decodeConsumer").innerText = decodedText;
+      //document.getElementById("reader").hidden = true;
+      //Hide scanner after on success
+      html5QrcodeScanner.clear();
+
+      document.getElementById("swapHashCodeConsumer").innerText  =stringToHash(decodedText);
+      
+    }
+    html5QrcodeScanner.render(onScanSuccess);
+
+function startQRScanConsumer(){
+document.getElementById("readerConsumer").hidden = false;
+}
+
+function stringToHash(string) {
+             
+             var hash = 0;
+              
+             if (string.length == 0) return hash;
+              
+             for (i = 0; i < string.length; i++) {
+                 char = string.charCodeAt(i);
+                 hash = ((hash << 5) - hash) + char;
+                 hash = hash & hash;
+             }
+              
+             return hash;
+         }
+</script>
 </html>
