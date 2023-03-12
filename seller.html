@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport"
+          content="width=device-width,
+                         initial-scale=1.0" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" integrity="sha512-ZDSPMa/JM1D+7kdg2x3BsruQ6T/JpJo3jWDWkCZsP+5yVyp1KfESqLI+7RqB5k24F7p2cV7i2YHh/890y6P6Sw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
   <title>Seller Page</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -12,18 +18,128 @@
         </header>
         <main class="container">
             
-            <button id="button-qr-scanner" onclick="startScan()">Scan QR Code </button>
+          <!--<button id="button-qr-scanner" onclick="startScan()">Scan QR Code </button> 
             <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
             <div id="qr-code"></div>
+          -->
+          <button id="qrScan" onclick="startQRScan()">Scan QR Code </button>
+          <div style="width: 500px" id="reader" hidden></div>
+          
+          <div id="decode"></div>
             
-            <button id="button-qr-generation">GenerateQR Code</button>
+            <button id="button-qr-generation">Generate QR Code</button>
 
             <div>
                 <button onclick="location.href='index.html'">Home Page</button>
               
             </div>
+            <h1>Swapped QR Code</h1>
+            <div id="qrcode"></div>
+            <h1>Hash Code</h1>
+            <div id="swapHashCode"></div>
+            
         </main>
     </body>
+  
   <script src="script.js"></script>
+  <script src="html5-qrcode.min.js"></script>
+  <script>
+    var html5QrcodeScanner = new Html5QrcodeScanner(
+    "reader", { fps: 10, qrbox: 250 });
+
+    function onScanSuccess(decodedText, decodedResult) {
+      // Handle on success condition with the decoded text or result.
+      console.log(`Scan result: ${decodedText}`, decodedResult);
+      document.getElementById("decode").innerText = decodedText;
+      //document.getElementById("reader").hidden = true;
+      //Hide scanner after on success
+      html5QrcodeScanner.clear();
+
+      //Swap string
+      var dr = swapRandomChars(decodedText);
+      console.log('Swapped String: '+ dr[0]);
+      console.log('Swapped Indices: '+ dr[1]);
+      GenerateQRCode(dr[0]);
+      document.getElementById("swapHashCode").innerText  =stringToHash(dr[0]);
+      
+    }
+
+    function GenerateQRCode(str1) {
+        // Create a new QRCode instance
+  const qrcode = new QRCode(document.getElementById("qrcode"), {
+    width: 512,
+    height: 512,
+    colorDark: "#000000",
+    colorLight: "#FDBB30",
+    
+    correctLevel: QRCode.CorrectLevel.L
+  });
+
+  // Generate the QR code with the random strings
+  qrcode.makeCode(str1);
+    }
+
+    function startQRScan(){
+
+        document.getElementById("reader").hidden = false;
+    }
+    function swapRandomChars(str) {
+    const len = str.length;
+    const idx1 = Math.floor(Math.random() * len);
+    let idx2 = Math.floor(Math.random() * len);
+    while (idx2 === idx1) {
+        idx2 = Math.floor(Math.random() * len);
+    }
+    const arr = str.split('');
+    [arr[idx1], arr[idx2]] = [arr[idx2], arr[idx1]];
+    const newStr = arr.join('');
+    const swapIndices = [idx1, idx2];
+    return [newStr, swapIndices];
+}
+    
+    
+    html5QrcodeScanner.render(onScanSuccess);
+
+    String.prototype.hashCode = function() {
+  var hash = 0,
+    i, chr;
+  if (this.length === 0) return hash;
+  for (i = 0; i < this.length; i++) {
+    chr = this.charCodeAt(i);
+    hash = ((hash << 5) - hash) + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return hash;
+}
+
+    function jsonToHash(str1) {
+    //const jsonString = JSON.stringify(json);
+    //const hash = crypto.createHash('sha256').update(jsonString).digest('hex');
+    //document.getElementById("swapHashCode").innerText = hash;
+    //return hash;
+    
+
+const str = str1;
+console.log(str1, str1.hashCode());
+return str1.hashCode()
+}
+
+// Convert to 32bit integer
+function stringToHash(string) {
+             
+             var hash = 0;
+              
+             if (string.length == 0) return hash;
+              
+             for (i = 0; i < string.length; i++) {
+                 char = string.charCodeAt(i);
+                 hash = ((hash << 5) - hash) + char;
+                 hash = hash & hash;
+             }
+              
+             return hash;
+         }
+
+    </script>
 </body>
 </html>
