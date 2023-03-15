@@ -7,7 +7,7 @@ function generateRandomStringArray() {
   let characterSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let result = [];
   const charactersLength = characterSet.length;
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 50; i++) {
     let str = '';
     for (let j = 0; j < length; j++) {
       str += characterSet.charAt(Math.floor(Math.random() * charactersLength));
@@ -36,7 +36,7 @@ generateButton.addEventListener('click', function(event) {
     width: 512,
     height: 512,
     colorDark: "#000000",
-    colorLight: "#FDBB30",
+    colorLight: "#FFFFFF",
     
     correctLevel: QRCode.CorrectLevel.L
   });
