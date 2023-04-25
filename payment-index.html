@@ -1,4 +1,3 @@
-<!--payment website should get notification from customer and seller website whenever the hashes are dropped into server. Then Payment page will check server if the hashes are matching. Message is displayed in payment website if the hashes are matching as true if not false-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,6 +14,7 @@
     <h1>Payment Webpage</h1>
     <p>Welcome to Payment Center</p>
   </div>
+  
   <div class="row">
     <div class="side">
       <p id="status">Waiting for hashes...</p>
@@ -24,42 +24,18 @@
   
       </form>
     </div>
+    <div class="middle">
+    <button id="button" onclick="checkHashCodes()">Check for hashes</button>
+  </div>
     <div class="main">
       <h2>Message Box</h2>
       <p>After checking hashes- Messages from server will be displayed here that if the matching hashes are available or not </p>
       
     </div>
   </div>
-  
-
     <div class="footer">
       <h2>Thank you Visit Again</h2>
     </div>
-    
-    
-    <script>
-      // Connect to Socket.io
-      const socket = io();
-
-      // Listen for the 'hashSubmitted' event
-      socket.on('hashSubmitted', ({ sellerHash, customerHash }) => {
-        // Send a GET request to the server to check for matching hashes
-        const url = `/check-matching-hashes?sellerHash=${sellerHash}&customerHash=${customerHash}`;
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', url);
-        xhr.onload = () => {
-          if (xhr.status === 200 && xhr.responseText === 'true') {
-            // Display a message if the hashes match
-            document.getElementById('status').textContent = 'The transaction is authentic!';
-          } else {
-            // Display a message if the hashes don't match
-            document.getElementById('status').textContent = 'The transaction is not authentic.';
-          }
-        };
-        xhr.send();
-      });
-    </script>
-    <script type="text/javascript" src="server.js"></script>
-    </body>
-    </html>
-    
+    <script type="text/javascript" src="script.js"></script>
+</body>
+</html>
