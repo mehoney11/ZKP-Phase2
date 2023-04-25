@@ -1,7 +1,7 @@
-//npm install qr-scanner
 var strReceived;
 let scannedQRCodes = [];
-//import QRCode from 'qrcode'; --> QR code isnt genereating Error :unexpected identifier QRCode.import call expects one or two arguments." 
+
+
 function generateRandomStringArray() {
   let length = 20;
   let characterSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -18,50 +18,34 @@ function generateRandomStringArray() {
 }
 
 window.onload = function() {
- // document.getElementById("qrcode").innerHTML = "";
-// Get the button element
-let generateButton = document.getElementById('button-qr-generation');
-document.getElementById("qrcode").innerHTML = "";
-// Add a click event listener to the button
-generateButton.addEventListener('click', function(event) {
+  let generateButton = document.getElementById('button-qr-generation');
   document.getElementById("qrcode").innerHTML = "";
-  // Generate an array of 2 random strings
-  const randomStringArray = generateRandomStringArray();
-
-  // Update the content of the 'string-random' element with the random string array
- document.getElementById('string-random').textContent = randomStringArray.join(",");
-
-  // Create a new QRCode instance
-  const qrcode = new QRCode(document.getElementById("qrcode"), {
-    width: 512,
-    height: 512,
-    colorDark: "#000000",
-    colorLight: "#FFFFFF",
-    
-    correctLevel: QRCode.CorrectLevel.L
+  generateButton.addEventListener('click', function(event) {
+    document.getElementById("qrcode").innerHTML = "";
+    const randomStringArray = generateRandomStringArray();
+    document.getElementById('string-random').textContent = randomStringArray.join(",");
+    const qrcode = new QRCode(document.getElementById("qrcode"), {
+      width: 512,
+      height: 512,
+      colorDark: "#000000",
+      colorLight: "#FFFFFF",
+      correctLevel: QRCode.CorrectLevel.L
+    });
+    qrcode.makeCode(randomStringArray.join(","));
   });
-
-  // Generate the QR code with the random strings
-  qrcode.makeCode(randomStringArray.join(","));
-});
 }
 
-
 const video = document.getElementById('camera');
-// Use navigator.mediaDevices.getUserMedia() to access the camera
+
 function startQRScanner(){
-navigator.mediaDevices.getUserMedia({ video: true })
+  navigator.mediaDevices.getUserMedia({ video: true })
   .then(function (stream) {
-    // Display the camera stream in the video element
     video.srcObject = stream;
     video.play();
-    
-    // Use the qr-scanner library to decode the QR code
     const qrScanner = new QrScanner(video, result => {
-      scannedQRCodes= result.textContent;
+      scannedQRCodes.push(result);
       document.getElementById('strReceievedDislay').textContent = scannedQRCodes.join(",");
-
-      qrScanner.stop(); // Stop scanning after the code is detected
+      qrScanner.stop();
     });
     qrScanner.start();
   })
@@ -69,6 +53,3 @@ navigator.mediaDevices.getUserMedia({ video: true })
     console.log("Error accessing camera: " + error.message);
   });
 }
-const buttonScan = document.getElementById('button-qr-scanner');
-buttonScan.addEventListener('click', startQRScanner);
-
