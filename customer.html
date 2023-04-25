@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
- 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport"
-          content="width=device-width,
-                         initial-scale=1.0" />
-    <title>Customer Page</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" integrity="sha512-ZDSPMa/JM1D+7kdg2x3BsruQ6T/JpJo3jWDWkCZsP+5yVyp1KfESqLI+7RqB5k24F7p2cV7i2YHh/890y6P6Sw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
-    <script src="script.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport"
+        content="width=device-width,
+        initial-scale=1.0" />
+        <title>Customer Page</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" integrity="sha512-ZDSPMa/JM1D+7kdg2x3BsruQ6T/JpJo3jWDWkCZsP+5yVyp1KfESqLI+7RqB5k24F7p2cV7i2YHh/890y6P6Sw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+        <link rel="stylesheet" href="style.css">
     </head>
- 
     <body>
         <header class="container">
             <h1>Customer Page </h1>
@@ -22,61 +19,80 @@
             <div>
                 <button id="qrScan" onclick="startQRScanConsumer()">Scan QR Code </button>
                 <div style="width: 500px" id="readerConsumer" hidden></div>
-          <h1>QR Decode String</h1>
-          <div id="decodeConsumer"></div>
-          <h1>Hash Code</h1>
-          <div id="swapHashCodeConsumer"></div>
-            <div id="string-random"></div>
-            <div id="qr-container">
-            <div id="qrcode"></div>
-                <div id="description"></div>
-        </div>
-            <div class="container">
-                <button onclick="location.href='index.html'">Home Page</button>
-              </div> 
-              <div>
-                <button>Send Hash</button>
-             </div>
-        </main>
-    </body>
-
-<script src="html5-qrcode.min.js"></script>
-<script src="fixed.js"></script>
-<script>
-
-var html5QrcodeScanner = new Html5QrcodeScanner(
-    "readerConsumer", { fps: 10, qrbox: 250 });
-
-    function onScanSuccess(decodedText, decodedResult) {
-      // Handle on success condition with the decoded text or result.
-      console.log(`Scan result: ${decodedText}`, decodedResult);
-      document.getElementById("decodeConsumer").innerText = decodedText;
-      //document.getElementById("reader").hidden = true;
-      //Hide scanner after on success
-      html5QrcodeScanner.clear();
-
-      document.getElementById("swapHashCodeConsumer").innerText  =stringToHash(decodedText);
-      
-    }
-    html5QrcodeScanner.render(onScanSuccess);
-
-function startQRScanConsumer(){
-document.getElementById("readerConsumer").hidden = false;
+                <h1>QR Decode String</h1>
+                <div id="decodeConsumer"></div>
+                <h1>Hash Code</h1>
+                <div id="swapHashCodeConsumer"></div>
+                <div id="string-random"></div>
+                <div id="qr-container">
+                    <div id="qrcode"></div>
+                    <div  id="description" hidden></div>
+                </div>
+                <div class="container">
+                    <button onclick="location.href='index.html'">Home Page</button>
+                </div>
+                <div>
+                    <h1>QR Code Scanner</h1>
+                    <button onclick="handleSubmit(); sendNotification();">Send Hash</button>
+                </div>
+                <div id="hashstatus">
+                    <p></p>
+                  </div>
+            </main>
+        </body>
+        <script src="script.js"></script>
+        <script src="html5-qrcode.min.js"></script>
+        <script>
+            var html5QrcodeScanner = new Html5QrcodeScanner("readerConsumer", { fps: 10, qrbox: 250 });
+            function onScanSuccess(decodedText, decodedResult) {
+                console.log(`Scan result: ${decodedText}`, decodedResult);
+                document.getElementById("decodeConsumer").innerText = decodedText;
+                //document.getElementById("reader").hidden = true;
+                //Hide scanner after on success
+                html5QrcodeScanner.clear();
+                document.getElementById("swapHashCodeConsumer").innerText  =stringToHash(decodedText);
+            }
+            html5QrcodeScanner.render(onScanSuccess);
+            function startQRScanConsumer(){
+                document.getElementById("readerConsumer").hidden = false;
+            }
+            function stringToHash(string) {
+                var hash = 0;
+                if (string.length == 0) return hash;
+                for (i = 0; i < string.length; i++) {
+                    char = string.charCodeAt(i);
+                    hash = ((hash << 5) - hash) + char;
+                    hash = hash & hash;
+                }
+                return hash;
+            }
+            //  function to send hash to server:
+            async function handleSubmit() {
+                // Get the decoded text from the QR code scanner
+                const decodedText = document.getElementById("decodeConsumer").innerText;
+                // Generate the hash code from the decoded text
+                const hash = stringToHash(decodedText);
+                // Send the hash value to the server
+                const response = await fetch("http://localhost:9990/hash", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ hash }),
+                });
+                // Log the response from the server
+                const data = await response.json();
+                console.log(data);
+                // Display the response message in the div tag with id="hashstatus"
+  const hashStatus = document.querySelector("#hashstatus p");
+  hashStatus.innerText = data.message;
+            }
+            function sendNotification() {
+                // Send an AJAX request to the server to notify of hash deposit
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", "http://yourserver.com/notify");//add server address here
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.send(JSON.stringify({ type: 'hashDeposited' }));
 }
-
-function stringToHash(string) {
-             
-             var hash = 0;
-              
-             if (string.length == 0) return hash;
-              
-             for (i = 0; i < string.length; i++) {
-                 char = string.charCodeAt(i);
-                 hash = ((hash << 5) - hash) + char;
-                 hash = hash & hash;
-             }
-              
-             return hash;
-         }
-</script>
-</html>
+        </script>
+        </html>
